@@ -21,7 +21,11 @@ task gravy(dependsOn: assembleRelease) << {
     }
 }
 ```
-Run the task
+Run the task from Android Studio Gradle tool window
+
+<img src="https://raw.githubusercontent.com/Urucas/gravy/master/screen.png" />
+
+or via cli
 ```bash
-$ ./gradlew -q gravy
+./gradlew -q gravy
 ```
