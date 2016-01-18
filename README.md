@@ -1,6 +1,6 @@
 #gravy<img src="https://raw.githubusercontent.com/Urucas/gravy/master/icon.png" />
 
-A simple gradle task to upload .apk to sauce-labs storage
+A simple gradle task to upload .apk releases to sauce-labs storage
 
 #Usage
 Just add the next code to your main app ```build.gradle``` file
