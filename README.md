@@ -1,6 +1,5 @@
-<img src="https://raw.githubusercontent.com/Urucas/gravy/master/icon.png" />
+#gravy<img src="https://raw.githubusercontent.com/Urucas/gravy/master/icon.png" />
 
-# gravy
 A simple gradle task to upload .apk to sauce-labs storage
 
 #Usage
