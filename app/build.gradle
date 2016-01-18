@@ -41,3 +41,28 @@ task gravy(dependsOn: assembleRelease) << {
         args "-c", "curl -u $u -X POST -H \"Content-Type: application/octet-stream\" $url?overwrite=true --data-binary @$apk_path"
     }
 }
+
+task gravyTest(dependsOn: gravy) << {
+    def apk_path = "$project.buildDir/outputs/apk/$project.name-release-unsigned.apk"
+    File file = new File("$apk_path")
+    def digest = java.security.MessageDigest.getInstance("MD5")
+    file.eachByte( 4096 ) { buffer, length ->
+        digest.update( buffer, 0, length )
+    }
+    def md5hash = new BigInteger(1, digest.digest()).toString(16).padLeft(32, '0')
+    def u = "$user:$accessKey"
+    def url = "$endpoint/$user"
+    def request = ["curl", "-u", "$u", "$url"].execute()
+    def response = new groovy.json.JsonSlurper().parseText(request.text)
+    def list = response.files
+    list.each {
+        if(it.name == "$project.name") {
+            if(it.md5 == "$md5hash") {
+                System.exit(0)
+            }else{
+                System.exit(1)
+            }
+        }
+    }
+    System.exit(1)
+}
