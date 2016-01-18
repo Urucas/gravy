@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.urucas.gravy.testapp"
+        minSdkVersion 10
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+}
+
+
+ext {
+    endpoint = 'http://saucelabs.com/rest/v1/storage'
+    user = 'user'
+    accessKey = 'accessKey'
+}
+
+task gravy(dependsOn: assembleRelease) << {
+    def apk_path = "$project.buildDir/outputs/apk/$project.name-release-unsigned.apk"
+    def u = "$user:$accessKey"
+    def url = "$endpoint/$user/$project.name"
+    exec {
+        executable "/bin/sh"
+        args "-c", "curl -u $u -X POST -H \"Content-Type: application/octet-stream\" $url?overwrite=true --data-binary @$apk_path"
+    }
+}
